@@ -1,44 +1,56 @@
 #include "joueur.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
-void creeJoueur(Joueur tab_joueur[], int *nb) {
-    Joueur j;
+void creeJoueur(ListeJoueurs *liste)
+{
+    NoeudJoueur *nouveau=(NoeudJoueur*)malloc(sizeof(NoeudJoueur));
     printf("Pseudo: ");
-    scanf("%s", j.pseudo);
-    j.scoreTotal = 0;
-    tab_joueur[*nb] = j;
-    (*nb)++;
+    scanf("%s",nouveau->joueur.pseudo);
+    nouveau->joueur.scoreTotal=0;
+    nouveau->suivant=liste->tete;
+    liste->tete=nouveau;
+    liste->taille++;
     printf("Joueur cree avec succes!\n");
 }
 
 void aficherJoueur(Joueur j) {
-    printf("Pseudo: %s\nScore = %d\n", j.pseudo, j.scoreTotal);
+    printf("Pseudo: %s\nScore = %d\n",j.pseudo,j.scoreTotal);
 }
 
-void modifierJoueur(Joueur *j) {
+void modifierJoueur(Joueur *j)
+{
     printf("Nouveau pseudo: ");
-    scanf("%s", j->pseudo);
+    scanf("%s",j->pseudo);
     printf("Nouveau score Total: ");
-    scanf("%d", &j->scoreTotal);
+    scanf("%d",&j->scoreTotal);
     printf("Joueur modifie avec succes!\n");
 }
 
-void supprimerJoueur(Joueur tab[], int *nb, char pseudo[]) {
-    int found = 0;
-    for (int i=0;i<*nb;i++) {
-        if (strcmp(tab[i].pseudo, pseudo) == 0) {
-            for (int j = i; j < *nb - 1; j++) {
-                tab[j] = tab[j + 1];
+void supprimerJoueur(ListeJoueurs *liste, char pseudo[])
+{
+    NoeudJoueur *courant=liste->tete;
+    NoeudJoueur *precedent=NULL;
+    while (courant!=NULL)
+    {
+        if (strcmp(courant->joueur.pseudo,pseudo)==0)
+            {
+            if (precedent==NULL) {
+                liste->tete=courant->suivant;
             }
-            (*nb)--;
-            found = 1;
+            else
+            {
+                precedent->suivant=courant->suivant;
+            }
+            free(courant);
+            liste->taille--;
             printf("Joueur supprime avec succes!\n");
-            break;
+            return;
         }
+        precedent=courant;
+        courant=courant->suivant;
     }
 
-    if (!found) {
-        printf("Joueur non trouve!\n");
-    }
+    printf("Joueur non trouve!\n");
 }
