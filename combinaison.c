@@ -1,50 +1,85 @@
 #include "combinaison.h"
 #include <stdio.h>
+#include <stdlib.h>
 
-Combinaison creeCombinaison(int *nb) {
-    Combinaison c;
+Combinaison* rechercherCombinaison(ListeCombinaisons *liste,int id)
+{
+    NoeudCombinaison *courant=liste->tete;
+    while (courant!=NULL)
+    {
+        if (courant->combinaison.id==id)
+        {
+            return &(courant->combinaison);
+        }
+        courant=courant->suivant;
+    }
+    return NULL;
+}
+
+Combinaison creeCombinaison(ListeCombinaisons *liste)
+{
+
+    NoeudCombinaison *nouveau=(NoeudCombinaison*)malloc(sizeof(NoeudCombinaison));
+
     printf("ID: ");
-    scanf("%d", &c.id);
-    for (int i=0;i<3;i++) {
-        printf("Couleur %d: ", i + 1);
-        scanf("%s", c.couleurs[i]);
+    scanf("%d",&nouveau->combinaison.id);
+    for(int i=0;i<3;i++)
+    {
+        printf("Couleur %d: ",i + 1);
+        scanf("%s", nouveau->combinaison.couleurs[i]);
     }
     printf("Points: ");
-    scanf("%d", &c.points);
-    (*nb)++;
+    scanf("%d",&nouveau->combinaison.points);
+    nouveau->suivant=liste->tete;
+    liste->tete=nouveau;
+    liste->taille++;
     printf("Combinaison creee avec succes!\n");
-    return c;
+    return nouveau->combinaison;
 }
 
-void afficherCombinaison(Combinaison c) {
-    printf("Combinaison %d: %s - %s - %s \nPoints: %d\n",
-           c.id, c.couleurs[0], c.couleurs[1], c.couleurs[2], c.points);
+void afficherCombinaison(Combinaison c)
+{
+    printf("Combinaison %d: %s .... %s ... %s \nPoints: %d\n",
+           c.id,c.couleurs[0],c.couleurs[1],c.couleurs[2],c.points);
 }
 
-void modifierCombinaison(Combinaison *c) {
+void modifierCombinaison(Combinaison *c)
+{
     printf("Modification de la combinaison %d\n", c->id);
-    for (int i=0;i<3;i++) {
-        printf("Nouvelle couleur %d: ", i + 1);
-        scanf("%s", c->couleurs[i]);
+    for(int i=0;i<3;i++)
+    {
+        printf("Nouvelle couleur %d: ",i + 1);
+        scanf("%s",c->couleurs[i]);
     }
     printf("Nouveaux points: ");
-    scanf("%d", &c->points);
+    scanf("%d",&c->points);
 }
 
-void supprimerCombinaison(Combinaison tab[],int *nb,int id) {
-    int found=0;
-    for (int i=0;i<*nb;i++) {
-        if (tab[i].id==id) {
-            // Remplacer par le dernier élément
-            tab[i]=tab[*nb-1];
-            (*nb)--;
-            found=1;
+void supprimerCombinaison(ListeCombinaisons *liste, int id)
+{
+    NoeudCombinaison *courant=liste->tete;
+    NoeudCombinaison *precedent=NULL;
+
+    while (courant!=NULL)
+    {
+        if (courant->combinaison.id==id)
+        {
+            if (precedent==NULL)
+            {
+                liste->tete=courant->suivant;
+            }
+            else
+            {
+                precedent->suivant=courant->suivant;
+            }
+            free(courant);
+            liste->taille--;
             printf("Combinaison supprimee!\n");
-            break;
+            return;
         }
+        precedent=courant;
+        courant=courant->suivant;
     }
 
-    if (!found) {
-        printf("Combinaison non trouvee!\n");
-    }
+    printf("Combinaison non trouvee!\n");
 }
