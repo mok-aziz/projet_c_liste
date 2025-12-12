@@ -27,5 +27,7 @@ void ajouterBonbon(Distributeur *d);
 void retirerBonbon(Distributeur *d);
 void afficherDistributeur(Distributeur d);
 void supprimerDistributeur(ListeDistributeurs *liste);
+Distributeur* rechercherDistributeur(ListeDistributeurs *liste, int id);
 
 #endif // DISTRIBUTEUR_H_INCLUDED
+
