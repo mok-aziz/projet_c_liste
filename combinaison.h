@@ -25,5 +25,6 @@ Combinaison creeCombinaison(ListeCombinaisons *liste);
 void afficherCombinaison(Combinaison c);
 void modifierCombinaison(Combinaison *c);
 void supprimerCombinaison(ListeCombinaisons *liste, int id);
-
+Combinaison* rechercherCombinaison(ListeCombinaisons *liste, int id);
 #endif // COMBINAISON_H_INCLUDED
+
