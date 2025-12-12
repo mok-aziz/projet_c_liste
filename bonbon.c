@@ -1,48 +1,80 @@
 #include "bonbon.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
-void creeBonbon(Bonbon tab_bon[],int* taille_tab_bon) {
-    Bonbon b;
+
+void afficherListeBonbons(ListeBonbons *liste)
+{
+    if (liste->tete==NULL)
+    {
+        printf("Liste vide!\n");
+        return;
+    }
+
+    NoeudBonbon *courant=liste->tete;
+    int i = 1;
+    while (courant!=NULL)
+    {
+        printf("%d. ",i++);
+        afficheBonbon(courant->bonbon);
+        courant=courant->suivant;
+    }
+}
+
+void creeBonbon(ListeBonbons *liste)
+{
+    NoeudBonbon *nouveau=(NoeudBonbon*)malloc(sizeof(NoeudBonbon));
     printf("Donner la COULEUR du bonbon: ");
-    scanf("%s",b.couleur);
+    scanf("%s",nouveau->bonbon.couleur);
     printf("Donner la VALEUR du bonbon: ");
-    scanf("%d",&b.valeur);
+    scanf("%d",&nouveau->bonbon.valeur);
+    nouveau->suivant=liste->tete;
+    liste->tete=nouveau;
+    liste->taille++;
 
-    tab_bon[*taille_tab_bon]=b;
-    (*taille_tab_bon)++;
     printf("Bonbon ajoute avec succes!\n");
 }
 
-void afficheBonbon(Bonbon b) {
-    printf("Couleur: %s, Valeur: %d\n", b.couleur, b.valeur);
+void afficheBonbon(Bonbon b)
+{
+    printf("Couleur:%s,Valeur:%d\n",b.couleur,b.valeur);
 }
 
-void modifierBonbon(Bonbon *b) {
+void modifierBonbon(Bonbon *b)
+{
     printf("Nouvelle couleur: ");
-    scanf("%s",b->couleur);
+    scanf("%s",b->couleur);//lehne famech & kodem b->couleur khaterha string deja
     printf("Nouvelle valeur: ");
     scanf("%d",&b->valeur);
     printf("Bonbon modifie avec succes!\n");
 }
 
-void supprimerBonbon(Bonbon tab_bonbon[],int *taille_tab_bon,char couleur[]) {
-    int index=-1;
-    for (int i=0;i<*taille_tab_bon;i++) {
-        if (strcmp(tab_bonbon[i].couleur,couleur)==0) {
-            index=i;
-            break;
+void supprimerBonbon(ListeBonbons *liste, char couleur[])
+{
+    NoeudBonbon *courant=liste->tete;
+    NoeudBonbon *precedent=NULL;
+    while (courant!=NULL)
+    {
+        if (strcmp(courant->bonbon.couleur,couleur)==0)
+        {
+
+            if (precedent==NULL)
+            {
+                liste->tete=courant->suivant;
+            }
+            else
+            {
+                precedent->suivant=courant->suivant;
+            }
+            free(courant);
+            liste->taille--;
+            printf("Bonbon supprime avec succes!\n");
+            return;
         }
+        precedent=courant;
+        courant=courant->suivant;
     }
 
-    if (index==-1) {
-        printf("Bonbon non trouve!\n");
-        return;
-    }
-
-    for (int i=index;i<*taille_tab_bon-1;i++) {
-        tab_bonbon[i]=tab_bonbon[i+1];
-    }
-    (*taille_tab_bon)--;
-    printf("Bonbon supprime avec succes!\n");
+    printf("Bonbon non trouve!\n");
 }
