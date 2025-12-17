@@ -25,5 +25,11 @@ void ajouterScore(ListeScores *liste);
 void afficherscore(ListeScores *liste);
 void trierScore(ListeScores *liste);
 void supprimerScore(ListeScores *liste, char pseudo[]);
+void trierScore(ListeScores *liste);
+void trierScoreDecroissant(ListeScores *liste);
+void trierScoreCroissant(ListeScores *liste);
+void trierScoreChronologique(ListeScores *liste);
+void trierScoreParJoueur(ListeScores *liste);
+void afficherStatistiquesJoueur(ListeScores *liste);
 
 #endif // SCORE_H_INCLUDED
